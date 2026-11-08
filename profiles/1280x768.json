@@ -1,0 +1,14 @@
+{
+  "name": "1280x768",
+  "client": { "width": 1280, "height": 768 },
+  "screen_centre": { "x": 640, "y": 384 },
+  "shelter_pre_hover": { "x": 620, "y": 370 },
+  "parking_cursor": { "x": 1100, "y": 150 },
+  "line_title": { "x": 265, "y": 59 },
+  "line_panel_close": { "x": 396, "y": 59 },
+  "transport_toolbar": { "x": 778, "y": 717 },
+  "bus_shelter_tool": { "x": 690, "y": 617 },
+  "bus_line_tool": { "x": 440, "y": 668 },
+  "palette_close": { "x": 863, "y": 574 },
+  "overview_first_magnifier": { "x": 198, "y": 553 }
+}
