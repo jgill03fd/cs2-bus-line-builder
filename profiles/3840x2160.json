@@ -1,0 +1,20 @@
+{
+  "clientResolution": "3840x2160",
+  "scale": 0.5,
+  "referenceSpace": "1920x1080",
+  "uiScale": "unverified (measured on the owner's default UI scale)",
+  "measured": "2026-11-08, Barney, Cities: Skylines II on a 3840x2160 display (Windows scaling 300%), screenshots and clicks at gamewin scale 0.5",
+  "note": "All points below are in the REFERENCE space (client size x scale = 1920x1080), the same space as shot images taken at scale 0.5. The screen centre is derived: client width/height x scale / 2 = (960,540). The top-down camera pivot lands there.",
+  "idleCursor": { "x": 1500, "y": 150 },
+  "tooltip": { "searchWidth": 260, "searchTop": 10, "searchBottom": 140 },
+  "stopIconSearchRadius": 120,
+  "ui": {
+    "transportationMenu": { "x": 1165, "y": 1005 },
+    "busTab": { "x": 652, "y": 793 },
+    "busStopTool": { "x": 960, "y": 852 },
+    "busLineTool": { "x": 663, "y": 930 },
+    "toolPanelClose": { "x": 1289, "y": 791 },
+    "transportationOverview": { "x": 1724, "y": 1005, "note": "toggles on/off" },
+    "linePanelTitle": { "x": 380, "y": 81 }
+  }
+}
