@@ -9,6 +9,8 @@
 # Usage: place_shelters.ps1 -LoopJson .\out\loop_Example.json -Set CW -Idx 1,2,3,4,5,6,7,8
 param([Parameter(Mandatory)][string]$LoopJson, [Parameter(Mandatory)][ValidateSet('CW', 'CCW')][string]$Set, [int[]]$Idx = @(1..8))
 . (Join-Path $PSScriptRoot 'roadkit.ps1') | Out-Null
+. (Join-Path $PSScriptRoot 'ui-profile.ps1')
+$ui = Get-UiProfile
 $gw = Join-Path $PSScriptRoot 'gamewin.ps1'
 $outDir = Join-Path $PSScriptRoot 'out'; $tag = [IO.Path]::GetFileNameWithoutExtension($LoopJson); New-Item -ItemType Directory -Force $outDir | Out-Null
 $calPath = Join-Path $outDir 'calibration.json'
@@ -47,10 +49,10 @@ foreach ($i in $Idx) {
     $before = CountNear $x $z 15.0
     RB set_camera @{ pivot = @{ x = $x; y = 575.0; z = $z }; zoom = 120.0 } | Out-Null
     Start-Sleep -Milliseconds 1500
-    & $gw hover 620 370 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 300
-    & $gw hover 640 384 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 900
-    & $gw click 640 384 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 1100
-    & $gw hover 1100 150 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 600
+    & $gw hover $ui.shelter_pre_hover.x $ui.shelter_pre_hover.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 300
+    & $gw hover $ui.screen_centre.x $ui.screen_centre.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 900
+    & $gw click $ui.screen_centre.x $ui.screen_centre.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 1100
+    & $gw hover $ui.parking_cursor.x $ui.parking_cursor.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 600
     if ((CountNear $x $z 15.0) -gt $before) { $placed = [pscustomobject]@{ x = [math]::Round($x, 1); z = [math]::Round($z, 1); normal = $d; tangent = $a }; Learn $prefab $d $a; break candidates }
   }
   if ($placed) { Write-Host ("{0} {1} [{2}]: placed at ({3},{4}) normal {5} m, tangent {6} m, after {7} tries" -f $Set, $i, $prefab, $placed.x, $placed.z, $placed.normal, $placed.tangent, $tries) }
@@ -59,5 +61,10 @@ foreach ($i in $Idx) {
 }
 & $gw restore | Out-Null
 $results | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $outDir "$tag.placed_$Set.json")
+
+
+
+
+
 
 
