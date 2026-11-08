@@ -1,0 +1,50 @@
+{
+  "name": "3840x2160",
+  "client": {
+    "width": 3840,
+    "height": 2160
+  },
+  "screen_centre": {
+    "x": 1920,
+    "y": 1080
+  },
+  "parking_cursor": {
+    "x": 3000,
+    "y": 300
+  },
+  "line_title": {
+    "x": 760,
+    "y": 162
+  },
+  "transport_toolbar": {
+    "x": 2330,
+    "y": 2010
+  },
+  "bus_shelter_tool": {
+    "x": 1920,
+    "y": 1704
+  },
+  "bus_line_tool": {
+    "x": 1326,
+    "y": 1860
+  },
+  "palette_close": {
+    "x": 2578,
+    "y": 1582
+  },
+  "source": {
+    "measured": "2026-11-08, 4K display (Windows scaling 300%), gamewin scale 0.5 (reference space 1920x1080)",
+    "converted": "every point x2 to client pixels, because the scripts call gamewin with -Scale 1.0",
+    "not_measured": "shelter_pre_hover, line_panel_close, overview_first_magnifier (scripts need shelter_pre_hover; do not run place_shelters or build_line until it is measured)",
+    "unused_by_scripts": {
+      "bus_tab": {
+        "x": 1304,
+        "y": 1586
+      },
+      "transportation_overview": {
+        "x": 3448,
+        "y": 2010
+      }
+    }
+  }
+}
