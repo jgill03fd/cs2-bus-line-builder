@@ -57,5 +57,24 @@ This is experimental. It was built for one city and is not a general tool.
 
 ## License
 
-MIT. See `LICENSE`.
+All rights reserved. Copyright (c) 2026 jgill03fd. See `LICENSE`.
+
+
+## Working rules (learned in play)
+
+These came from real mistakes during the build. The scripts assume them.
+
+- **One action, then a check.** Take a screenshot after each click or key that changes the screen. Never chain several UI actions blind.
+- **Check the title before renaming.** Open the line panel, read its length and stop count, and only then type a name. Overview rows move after every rename and scroll, so the row you clicked may not be the one you meant.
+- **Scroll with the mouse wheel**, not the scrollbar thumb.
+- **Verify on the bridge.** After each rename or build, confirm the name, stop count and completeness with get_transport_lines.
+- **Bulldozer:** hover the target and confirm it is highlighted (the stop itself, not the road beside it) before clicking. Exit the tool with its own key (B), not right-click.
+- **Stop placement:** use the placed-point file from place_shelters.ps1, not the planned points. The bridge search radius for stops must cover the whole loop (2 km).
+- **Road class sets the offset:** Small roads at 6 m, Medium at 8 m, Large Divided at 12 m, learned per road type.
+- **Checkpoint before removal:** Save before any demolish or line deletion.
+- **Lines that leave the city** are named CITY TRANS N. Connectors into the city are RES(...), IND(...) or COM(...) CONN.
+- **Clear the screen with the mouse Back button** (`gamewin.ps1 back -X2 4`). One press closes one panel layer, and one press drops the Bus Line Tool together with its palette. Repeated presses never open the pause menu. Escape does not drop the Bus Line Tool, so do not rely on it.
+- **No clicks near the toolbar or panels while a build tool is active.** A click on the map with the Bus Line Tool selected can remove a stop from a route. Close panels and the overview first, then select the tool. A stray click removed a stop from a line once; the fix was to delete the line after a checkpoint and rebuild it from the placed points.
+
+
 
