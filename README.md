@@ -28,7 +28,7 @@ This is experimental. It was built for one city and is not a general tool.
 ## Workflow (one district)
 
 1. Plan the loop and check the output:
-   `.\loop_gen.ps1 -Name Example -Cx -1500 -Cz 2580 -R 700 -Corners "x1,z1;x2,z2;x3,z3;x4,z4"`
+   `.\loop_gen.ps1 -Name Example -Cx 0 -Cz 0 -R 700 -Corners "x1,z1;x2,z2;x3,z3;x4,z4"`
 2. Select the Bus Shelter tool, then place the CW and CCW shelters:
    `.\place_shelters.ps1 -LoopJson .\out\loop_Example.json -Set CW`
    `.\place_shelters.ps1 -LoopJson .\out\loop_Example.json -Set CCW`

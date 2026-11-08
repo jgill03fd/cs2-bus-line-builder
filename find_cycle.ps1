@@ -1,7 +1,7 @@
 # Finds a closed two-way road cycle near a point and prints loop_gen corners for it (bridge read, or the loop_gen edge cache).
 # For every two-way edge the shortest cycle through it is edge length + shortest path between its ends without it.
 # The cycle with a length in range whose centre is closest to the target wins. Corners are junction ids spaced along it.
-# Usage: find_cycle.ps1 -Cx -300 -Cz -150 -R 450 [-MinLen 1000] [-MaxLen 2200]   (uses/creates out\edges_<x>_<z>_<r>.json)
+# Usage: find_cycle.ps1 -Cx 0 -Cz 0 -R 450 [-MinLen 1000] [-MaxLen 2200]   (uses/creates out\edges_<x>_<z>_<r>.json)
 param([double]$Cx, [double]$Cz, [double]$R = 450, [double]$MinLen = 1000, [double]$MaxLen = 2200, [int]$Corners = 4)
 . (Join-Path $PSScriptRoot 'roadkit.ps1') | Out-Null
 $dir = Join-Path $PSScriptRoot 'out'; New-Item -ItemType Directory -Force $dir | Out-Null

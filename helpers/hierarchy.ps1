@@ -64,7 +64,7 @@ $paths = foreach ($x in ($E | Sort-Object { $order[$_.cls] })) {
   "$halo<path d='$d' class='r $($x.cls)'><title>$($x.prefab) | $($x.cls) | load $([math]::Round($x.flow,1)) | id $($x.id)</title></path>"
 }
 $dots = foreach ($i in ($issues | ? { $_.type -like 'Freeway*' })) { "<circle cx='$(X $i.x)' cy='$(Z $i.z)' r='$(if($i.sev -eq 3){6}else{4.5})' class='j s$($i.sev)'><title>$($i.type): $($i.detail) @ ($($i.x),$($i.z))</title></circle>" }
-$mark = "<circle cx='$(X -523)' cy='$(Z -49)' r='11' class='new'><title>New crossroads (was roundabout)</title></circle>"
+$mark = ''
 $rows = ($issues | Sort-Object sev -Desc | Select -First 60 | % { "<tr><td>$($_.type)</td><td>($($_.x), $($_.z))</td><td>$($_.detail)</td></tr>" }) -join "`n"
 $srows = ($sum | Sort-Object { - $rank[$_.cls] } | % { "<tr><td><span class='sw $($_.cls)'></span>$($_.cls)</td><td>$($_.km) km</td><td>$($_.medianLoad)</td></tr>" }) -join "`n"
 $nFL = @($issues | ? { $_.type -eq 'Freeway meets Local street' }).Count; $nFC = @($issues | ? { $_.type -eq 'Freeway meets Collector street' }).Count
