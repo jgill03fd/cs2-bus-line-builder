@@ -58,4 +58,4 @@ Growth Opportunities
 
 Writes only `work/reports/mayor-report.md`: the Daily Executive Brief, the Strategic Review, then `## Decisions` (each Chief of Staff project id: APPROVED / REJECTED / HOLD, one line each with the Decision Framework reading and, for APPROVED, the first step Claude takes), `## Conflicts`, `## Unknowns`, and one last line `OVERALL STATUS: OK / WATCH / ACT` (OK nothing soon; WATCH problems but no limit breached; ACT a limit or floor breached or a large share of the city hurt).
 
-Rules above any score: treasury floor 70M; consumption before capacity; upgrade before new building; pollution checks before homes and water; no college closures; tax rates only on the Economy agent's recommendation; a checkpoint before every change so any decision can be undone.
+Rules above any score: the treasury floor; consumption before capacity; upgrade before new building; pollution checks before homes and water; no college closures; tax rates only on the Economy agent's recommendation; a checkpoint before every change so any decision can be undone.

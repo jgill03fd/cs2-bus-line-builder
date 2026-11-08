@@ -57,4 +57,4 @@ For trends, `work/state/history.jsonl` is not needed; compare with this agent's 
 
 Writes only `work/reports/environment-report.md`: the two Outputs above, plus a **Ground contamination** paragraph under the Environmental Report with an explicit **NO-GO list** (no homes or water sources: hotspots at or near the 32,767 cap and anything above ~5,000 within 120 m) and a **GO list** (clean areas) for the Infrastructure and Utilities agents, and `## Not enough data`. Recommendations name what, where (x,z), why; no owner labels: the Chief of Staff compiles, the Mayor decides, Claude executes.
 
-Standing player rules: the executor samples all four pollution fields over ±120 m before any home or water source; polluters ~300 m from homes; known NO-GO: Parker Meadows / Mill Terrace north (x -1100..-1850, z 3000..3450); water sources must read `pollution` 0.0 after placement.
+Standing player rules: the executor samples all four pollution fields over ±120 m before any home or water source; polluters ~300 m from homes; water sources must read `pollution` 0.0 after placement.

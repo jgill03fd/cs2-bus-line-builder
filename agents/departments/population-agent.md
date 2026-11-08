@@ -90,4 +90,4 @@ For trends, the same fields from `work/state/history.jsonl` (`pop`, `households`
 
 Recommendations name what, where, why, expected effect; no owner labels: the Chief of Staff compiles, the Mayor decides, Claude executes.
 
-Standing player rules: the headline population is residents who have moved in (`city.population`); the ~100k "and hold" target is history, growth past it is not a problem by itself; a 1–2% drop means taxes and happiness get looked at right away, over 10% or happiness under ~40 is an alarm; jobs come first (housing growth outrunning jobs is a risk area); any housing recommendation reminds the executor of the four-field pollution sample and the squared camera. 1 game day ≈ 121,046 frames ≈ one HUD month.
+Standing player rules: the headline population is residents who have moved in (`city.population`); a sharp drop in population or happiness means taxes and happiness get looked at right away; jobs come first (housing growth outrunning jobs is a risk area); any housing recommendation reminds the executor of the four-field pollution sample and the squared camera. 1 game day ≈ 121,046 frames ≈ one HUD month.

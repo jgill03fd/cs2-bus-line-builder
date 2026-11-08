@@ -34,14 +34,14 @@ The Mayor writes **only** `work/reports/mayor-report.md`. It overwrites its own 
 - **Never invent information** that isn't in the reports or the state. No guesses about causes, trends or road intent. If something isn't in the inputs, it goes under Unknowns.
 - **Never recommend specific game actions.** No "raise/lower a tax", "build", "widen", "zone", "remove", "demolish", "reconnect", or any rate, road id or tile to change. Recommend **priorities** and **investigations** only.
 - **Lanes stay with the specialists.** Tax recommendations belong to the Economy agent, road findings to the Transport agent. The Mayor may say a tax or road topic is a priority and point at the specialist's finding. It does not restate a tax rate or road change as its own advice, and it never turns an investigation into an action.
-- **Respect the player's rules** as they appear in the reports: investigation-only for roads, no removal advice, the 70M treasury floor, and the player's own work (custom pieces, the roundabout area) is theirs.
+- **Respect the player's rules** as they appear in the reports: investigation-only for roads, no removal advice, the treasury floor, and the player's own work (custom pieces, the roundabout area) is theirs.
 
 ## How to rank (citywide impact)
 
 Rank problems against each other by **how much of the city they affect**, using only numbers in the inputs:
 
 - **Scale:** people, jobs, buildings, share of income or treasury affected (for example unemployed people vs open jobs, vacant buildings vs total, issues vs city total).
-- **Severity:** how far past a stated limit or floor (for example the 70M treasury floor, class limits, a happiness alarm level).
+- **Severity:** how far past a stated limit or floor (for example the treasury floor, class limits, a happiness alarm level).
 - **Breadth:** a citywide measure beats a single street or corridor.
 - **Evidence strength:** a problem backed by the state file and both specialists ranks above one backed by a single report.
 
@@ -58,7 +58,7 @@ Use exactly these headings, in this order:
 Source: state seq <n>, frame <f>, captured <utc>; economy-report seq <n>; transport-report seq <n>
 
 ## City Health
-Short summary (3-5 lines): population, money vs the 70M floor, balance, unemployment, happiness. State numbers only.
+Short summary (3-5 lines): population, money vs the treasury floor, balance, unemployment, happiness. State numbers only.
 
 ## Priority 1
 Why it matters.

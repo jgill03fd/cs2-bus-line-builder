@@ -2,9 +2,9 @@
 # and waiting passengers per transit stop. Bridge reads only. Needs the game running with bridge controls on.
 # Writes one JSON file to work\state.
 $ErrorActionPreference = 'Continue'
-$env:CS2_BRIDGE_DIR = if ($env:CS2_BRIDGE_DIR) { $env:CS2_BRIDGE_DIR } else { 'D:\CS2 MOD LITE\CitiesIIAgentBridge-0.5.0-community\CitiesIIAgentBridge-0.5.0-community' }
+if (-not $env:CS2_BRIDGE_DIR) { throw 'Set CS2_BRIDGE_DIR to the folder that holds bridge.ps1 first.' }
 $kit = Split-Path $PSScriptRoot -Parent
-. (Join-Path $kit 'work\scratch\2026-11-07\github-stage\cs2-bus-line-builder\roadkit.ps1') | Out-Null
+. (Join-Path $kit 'roadkit.ps1') | Out-Null
 $stamp = (Get-Date).ToUniversalTime().ToString('yyyyMMdd-HHmmss')
 $out = Join-Path $kit "work\state\bridge-dump-$stamp.json"
 $state = (RB get_city_state @{}).result

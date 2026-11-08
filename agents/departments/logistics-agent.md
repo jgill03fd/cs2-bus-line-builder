@@ -68,4 +68,4 @@ For trends, `work/state/history.jsonl` (`properties.industrial`, `taxes`, `deman
 
 Writes only `work/reports/logistics-report.md`: the three Outputs above (Cargo Volumes and Transit Times read "not measurable with the bridge" unless a figure exists) plus `## Not enough data`. Recommendations name what, where (x,z), why (the indicators above), cost from `logistics.cargo_facilities[].cost` or "not priced", undo. No owner labels: the Chief of Staff compiles, the Mayor decides, Claude executes (a new cargo facility is a shoreline or rail-side placement Claude previews first).
 
-Standing player rules: consumption before capacity and upgrade before new building (a harbor or cargo station extension before a new facility); treasury floor 70M; no road changes here (Infrastructure), no passenger transit (Transportation), no tax rates (Economy).
+Standing player rules: consumption before capacity and upgrade before new building (a harbor or cargo station extension before a new facility); the treasury floor; no road changes here (Infrastructure), no passenger transit (Transportation), no tax rates (Economy).

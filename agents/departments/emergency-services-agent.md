@@ -61,4 +61,4 @@ Ignore missing or null values: incident reports and `average_response_time` are 
 
 Writes only `work/reports/emergency-services-report.md`: the three Outputs above plus `## Not enough data`. Stations, Personnel and Equipment items name what, where (x,z), why (imports, crime factor, gap), cost from `emergency.buildings[].cost` or "not priced", undo. No owner labels: the Chief of Staff compiles, the Mayor decides, Claude executes.
 
-Standing player rules: consumption before capacity (usage 1.0 on a station is a building flag; the proof of need is imports, the crime factor or an uncovered area); upgrade before new building (station extensions, extra vehicles first); treasury floor 70M; road changes go to Infrastructure.
+Standing player rules: consumption before capacity (usage 1.0 on a station is a building flag; the proof of need is imports, the crime factor or an uncovered area); upgrade before new building (station extensions, extra vehicles first); the treasury floor; road changes go to Infrastructure.

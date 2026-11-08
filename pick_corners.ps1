@@ -1,7 +1,7 @@
 # Picks loop corners for a district from the bridge district atlas: for each outline vertex, the nearest unused
 # road junction (3+ roads) inside the district's bounding box. Prints the corners in the order loop_gen.ps1 expects
 # and the ready-to-run loop_gen command. Bridge reads only.
-# Usage: pick_corners.ps1 -District "Pinewood Junction"
+# Usage: pick_corners.ps1 -District "<district name>"
 param([Parameter(Mandatory)][string]$District)
 . (Join-Path $PSScriptRoot 'roadkit.ps1') | Out-Null
 $d = @((RB get_district_atlas @{}).result.items | ? { $_.name -eq $District }) | Select-Object -First 1

@@ -23,7 +23,7 @@ Advisory only. Reads the city's state file, writes a report, and stops. Never to
 2. **Only recommend investigation.** Every recommendation is a thing to *look at or find out*: what a road connects to, whether a piece is a ramp or a street, how many lanes it has, whether it is the player's own work, what feeds the load, whether the number is a counting artifact. A recommendation never tells the player to build, widen, remove or reconnect.
 3. **State what you don't know about intent.** For each flagged road, say what the file can't tell you: ramp terminal or real street? only access to homes? custom player-built piece? part of a design the player did on purpose? Investigation is the way to answer those questions.
 4. **A flag is not a verdict.** The file counts loads and delays. It does not know why a road exists. Flagged roads may be fine on purpose (ramp terminals, the player's own designs). Say "worth checking", not "problem to fix".
-5. **Mark the player's own work.** Custom Road Builder pieces (prefab names starting `ra…` or `r2…`), the Robin/N-S roundabout area and slip roads the player redesigned: label them **PLAYER'S WORK** and only describe what the numbers show. The investigation item can be "ask the player what this piece is for".
+5. **Mark the player's own work.** Custom Road Builder pieces (prefab names starting `ra…` or `r2…`), the roundabout area and slip roads the player redesigned: label them **PLAYER'S WORK** and only describe what the numbers show. The investigation item can be "ask the player what this piece is for".
 6. **No ownership or action labels.** Because nothing is recommended for action, don't use USER-ONLY / AGENT-ALLOWED.
 
 If a recommendation would break any of these rules, rewrite it as an investigation item or drop it.
@@ -59,7 +59,7 @@ If a recommendation would break any of these rules, rewrite it as an investigati
 
 Caveats to repeat when relevant:
 - Lists are capped at 5 per class, so `road_issues` is larger than what is itemised.
-- The class rules label bridges (e.g. the 6-lane Extradosed bridges at z 3250) and custom Road Builder roads as **Local**, so "Local overloaded" on those pieces likely overstates the problem.
+- The class rules label bridges (e.g. multi-lane Extradosed bridges) and custom Road Builder roads as **Local**, so "Local overloaded" on those pieces likely overstates the problem.
 - `road_type` shows the lane count in its name ("Highway Oneway - 1 lane"), but not whether a piece is a ramp or mainline.
 
 ### Live state beats cached reports
@@ -76,7 +76,7 @@ Caveats to repeat when relevant:
 | `highway_street_contacts` | freeway ↔ local street joins + freeway ↔ collector street joins |
 | `road_issues` | the five tile counts added together |
 
-- Compare by reading the page's stat tiles, plus the "62 → 46" style text in `highway-plan.html`. Do not recompute anything from the pages' map data. If a page can't be read or has no matching figure, say "no cached figure to compare".
+- Compare by reading the page's stat tiles, plus the "N → M" style text in `highway-plan.html`. Do not recompute anything from the pages' map data. If a page can't be read or has no matching figure, say "no cached figure to compare".
 - Treat a gap as stale, not as a bug in the live state, unless the live state fails validation (checksum). Likely cause: the page is refreshed only for the area last worked on, so most of its traffic counters are older.
 - Do not suggest regenerating the cached pages as a fix for the city.
 - If a page is *newer* than the state file (modified after `capturedUtc`), flag that the **state** is the stale one and say it needs refreshing. Make no other claim about which is right.
@@ -103,7 +103,7 @@ Each of the four class sections has the same shape:
 
 1. **Overloads and hierarchy violations**: a table of the class's `hierarchy_issues` rows (road_id, road_type, issue, load vs class limit, x,z). Freeway rows are the freeway-street contacts.
 2. **Slowest roads**: a table of the class's `congested_edges` rows (road_id, road_type, load, delay_ratio, severity, x,z).
-3. **What the file doesn't tell us (intent)**: one to three bullets per section. Examples: "is 1052784 a ramp or mainline?", "does 304329 end at a ramp terminal?", "949170 is a custom piece: the player's work".
+3. **What the file doesn't tell us (intent)**: one to three bullets per section. Examples: "is <road_id> a ramp or mainline?", "does <road_id> end at a ramp terminal?", "<road_id> is a custom piece: the player's work".
 4. **Investigate**: up to five numbered items, each in this form: `Check <road_id> at (x,z): <what to look at and what answer would explain the numbers>`. Investigation only. No removal, no building, no widening, no reconnecting.
 
 If a class has fewer than five rows, show what exists. If a class has none, say so.
