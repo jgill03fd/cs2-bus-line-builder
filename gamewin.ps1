@@ -1,4 +1,4 @@
-param([ValidateSet('shot','click','key','drag','hover','rclick','scroll','restore')][string]$Action = 'shot', [int]$X = 0, [int]$Y = 0, [string]$Out = "$PSScriptRoot\game_shot.png", [double]$Scale = 0.5,
+param([ValidateSet('shot','click','key','drag','hover','rclick','scroll','restore','back')][string]$Action = 'shot', [int]$X = 0, [int]$Y = 0, [string]$Out = "$PSScriptRoot\game_shot.png", [double]$Scale = 0.5,
   [int]$X2 = 0, [int]$Y2 = 0, [string]$Keys = '', [switch]$Full, [switch]$Hold)
 # Input/screenshots for the Cities: Skylines II window. Coordinates are GAME CLIENT pixels (1920x1080 = the game's own
 # resolution) divided by -Scale; i.e. read them off a `shot -Scale s` image and pass the same -Scale.
@@ -78,6 +78,12 @@ switch ($Action) {
     $n = [math]::Abs($X2); $d = $(if ($X2 -lt 0) { [uint32]4294967176 } else { [uint32]120 })
     for ($i = 0; $i -lt $n; $i++) { [W]::mouse_event(0x0800, 0, 0, $d, [UIntPtr]::Zero); Start-Sleep -Milliseconds 60 }
     Done; "scrolled $X2 at ($X,$Y)"
+  }
+  # mouse Back button (XButton1): clears one panel layer per press and drops the Bus Line Tool; -X2 = presses (default 1)
+  'back' {
+    Save-User; Focus-Game; $n = [math]::Max(1, $X2)
+    for ($i = 0; $i -lt $n; $i++) { [W]::mouse_event(0x0080, 0, 0, 1, [UIntPtr]::Zero); Start-Sleep -Milliseconds 60; [W]::mouse_event(0x0100, 0, 0, 1, [UIntPtr]::Zero); Start-Sleep -Milliseconds 250 }
+    Done; "back pressed $n time(s)"
   }
   'hover' { Save-User; Focus-Game; $s = ToScreen $X $Y; MoveTo $s[0] $s[1]; Start-Sleep -Milliseconds 200; "hover ($X,$Y)" }
   'rclick' {
