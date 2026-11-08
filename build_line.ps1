@@ -10,6 +10,8 @@
 #        build_line.ps1 -LoopJson .\out\loop_Example.json -Set CW -Go -Crops (builds it; saves tooltip crops)
 param([Parameter(Mandatory)][string]$LoopJson, [Parameter(Mandatory)][ValidateSet('CW', 'CCW')][string]$Set, [switch]$Go, [switch]$Crops)
 . (Join-Path $PSScriptRoot 'roadkit.ps1') | Out-Null
+. (Join-Path $PSScriptRoot 'ui-profile.ps1')
+$ui = Get-UiProfile
 Add-Type -AssemblyName System.Drawing
 $gw = Join-Path $PSScriptRoot 'gamewin.ps1'
 $outDir = Join-Path $PSScriptRoot 'out'; $tag = [IO.Path]::GetFileNameWithoutExtension($LoopJson); New-Item -ItemType Directory -Force $outDir | Out-Null
@@ -31,21 +33,26 @@ for ($t = 0; $t -lt 6; $t++) { $pitch = (RB get_camera @{}).result.angle[1]; if 
 Write-Host "camera pitch $([math]::Round($pitch, 2)); zoom 10 from here on, camera not touched again until the route is complete"
 function Click-Stop($st, $tag) {
   RB set_camera @{ pivot = @{ x = $st.x; y = 575.0; z = $st.z }; zoom = 10.0 } | Out-Null; Start-Sleep -Milliseconds 1300
-  & $gw hover 620 370 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 300
-  & $gw hover 640 384 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 1200
+  & $gw hover $ui.shelter_pre_hover.x $ui.shelter_pre_hover.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 300
+  & $gw hover $ui.screen_centre.x $ui.screen_centre.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 1200
   if ($Crops) {
     $shot = Join-Path $outDir "tooltip_$Set$tag.png"; & $gw shot -Out $shot -Scale 1.0 | Out-Null
     $img = [System.Drawing.Image]::FromFile($shot); $bmp = New-Object System.Drawing.Bitmap 420, 260; $gr = [System.Drawing.Graphics]::FromImage($bmp)
     $gr.DrawImage($img, (New-Object System.Drawing.Rectangle 0, 0, 420, 260), (New-Object System.Drawing.Rectangle 430, 254, 420, 260), 'Pixel')
     $bmp.Save((Join-Path $outDir "tooltip_crop_$Set$tag.png")); $gr.Dispose(); $bmp.Dispose(); $img.Dispose()
   }
-  & $gw click 640 384 -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 1100
+  & $gw click $ui.screen_centre.x $ui.screen_centre.y -Scale 1.0 -Hold | Out-Null; Start-Sleep -Milliseconds 1100
 }
 Click-Stop $stops[0] '_1'
 for ($i = 1; $i -lt $stops.Count; $i++) { Click-Stop $stops[$i] ('_' + ($i + 1)); Write-Host "clicked $Set stop $($i + 1) of $($stops.Count)" }
 Click-Stop $stops[0] '_close'
-& $gw hover 1100 150 -Scale 1.0 -Hold | Out-Null
+& $gw hover $ui.parking_cursor.x $ui.parking_cursor.y -Scale 1.0 -Hold | Out-Null
 Write-Host "closing click sent on stop 1. Check get_transport_lines for a complete line with $($stops.Count) stops, then name it and set its fleet by hand."
+
+
+
+
+
 
 
 
