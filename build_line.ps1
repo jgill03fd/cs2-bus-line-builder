@@ -12,13 +12,14 @@ param([Parameter(Mandatory)][string]$LoopJson, [Parameter(Mandatory)][ValidateSe
 . (Join-Path $PSScriptRoot 'roadkit.ps1') | Out-Null
 Add-Type -AssemblyName System.Drawing
 $gw = Join-Path $PSScriptRoot 'gamewin.ps1'
-$outDir = Join-Path $PSScriptRoot 'out'; New-Item -ItemType Directory -Force $outDir | Out-Null
+$outDir = Join-Path $PSScriptRoot 'out'; $tag = [IO.Path]::GetFileNameWithoutExtension($LoopJson); New-Item -ItemType Directory -Force $outDir | Out-Null
 $loop = Get-Content $LoopJson -Raw | ConvertFrom-Json
 $points = if ($Set -eq 'CW') { $loop.cw } else { $loop.ccw }
-$all = @((RB get_transport_stops @{ x = [double]$points[0].shelter[0]; z = [double]$points[0].shelter[1]; radius = 900.0 }).result.stops)
+$placedMap = @{}; $tag = [IO.Path]::GetFileNameWithoutExtension($LoopJson); $placedFile = Join-Path $outDir "$tag.placed_$Set.json"; if (Test-Path $placedFile) { foreach ($r in (Get-Content $placedFile -Raw | ConvertFrom-Json)) { if ($r.placed) { $placedMap[[int]$r.n] = $r.point } } }
+$all = @((RB get_transport_stops @{ x = [double]$points[0].shelter[0]; z = [double]$points[0].shelter[1]; radius = 2000.0 }).result.stops)
 $stops = @()
 foreach ($p in $points) {
-  $px = [double]$p.shelter[0]; $pz = [double]$p.shelter[1]
+  if ($placedMap.ContainsKey([int]$p.n)) { $px = [double]$placedMap[[int]$p.n].x; $pz = [double]$placedMap[[int]$p.n].z } else { $px = [double]$p.shelter[0]; $pz = [double]$p.shelter[1] }
   $best = $all | Sort-Object { [math]::Pow($_.position.x - $px, 2) + [math]::Pow($_.position.z - $pz, 2) } | Select-Object -First 1
   $d = if ($best) { [math]::Round([math]::Sqrt([math]::Pow($best.position.x - $px, 2) + [math]::Pow($best.position.z - $pz, 2)), 1) } else { -1 }
   if (-not $best -or $d -gt 15) { Write-Host "$Set $($p.n): no registered stop within 15 m of ($px,$pz). Place the shelter first."; exit 1 }
@@ -45,5 +46,9 @@ for ($i = 1; $i -lt $stops.Count; $i++) { Click-Stop $stops[$i] ('_' + ($i + 1))
 Click-Stop $stops[0] '_close'
 & $gw hover 1100 150 -Scale 1.0 -Hold | Out-Null
 Write-Host "closing click sent on stop 1. Check get_transport_lines for a complete line with $($stops.Count) stops, then name it and set its fleet by hand."
+
+
+
+
 
 
