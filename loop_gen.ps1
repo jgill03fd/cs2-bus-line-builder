@@ -2,10 +2,18 @@
 # Fetches road edges around a centre, joins shortest drivable legs between four corner points into a simple cycle
 # (edge-disjoint legs), then writes loop_<Name>.json with CW and CCW stop sets (shelter point 12 m on the right of each line's travel).
 # Usage: loop_gen.ps1 -Name Example -Cx 0 -Cz 0 -R 700 -Corners "x1,z1;x2,z2;x3,z3;x4,z4"
-param([Parameter(Mandatory)][string]$Name, [double]$Cx, [double]$Cz, [double]$R = 700, [Parameter(Mandatory)][string]$Corners, [int]$Stops = 8, [double]$Offset = 12.0)
+param([Parameter(Mandatory)][string]$Name, [double]$Cx, [double]$Cz, [double]$R = 700, [Parameter(Mandatory)][string]$Corners, [int]$Stops = 8, [double]$Offset = 12.0, [switch]$TwoWayOnly, [switch]$UseCache)
 . (Join-Path $PSScriptRoot 'roadkit.ps1') | Out-Null
 $dir = Join-Path $PSScriptRoot 'out'; New-Item -ItemType Directory -Force $dir | Out-Null
-$raw = (RB get_network_edges @{ x = $Cx; z = $Cz; radius = $R; limit = 6000 }).result.edges
+# -UseCache: the road edges around a centre are fetched once and kept in out\edges_<x>_<z>_<r>.json (valid 6 h), so
+# trying several corner sets on the same district does not re-read the roads every time.
+$cacheFile = Join-Path $dir ("edges_{0}_{1}_{2}.json" -f [int]$Cx, [int]$Cz, [int]$R)
+if ($UseCache -and (Test-Path $cacheFile) -and ((Get-Date) - (Get-Item $cacheFile).LastWriteTime).TotalHours -lt 6) {
+  $raw = Get-Content $cacheFile -Raw | ConvertFrom-Json; "edges: cache hit ($cacheFile)"
+} else {
+  $raw = (RB get_network_edges @{ x = $Cx; z = $Cz; radius = $R; limit = 6000 }).result.edges
+  if ($UseCache) { $raw | ConvertTo-Json -Depth 8 -Compress | Set-Content $cacheFile }
+}
 $edges = @()
 foreach ($e in $raw) {
   if ($e.prefab -notmatch 'Pipe|Cable|Line|voltage|Track|Subway|Pedestrian|Alley|Taxiway|Runway|Airplane|Marker|Path') {
@@ -13,14 +21,18 @@ foreach ($e in $raw) {
   }
 }
 "edges: $($edges.Count)"
-$pos = @{}; $adj = @{}; $byId = @{}
+$pos = @{}; $adj = @{}; $byId = @{}; $deg = @{}
+# -TwoWayOnly: one-way edges are left out entirely, so every leg of the loop can be driven both ways.
+if ($TwoWayOnly) { $edges = @($edges | ? { $_.p -notmatch 'Oneway' }); "two-way only: $($edges.Count) edges kept" }
 foreach ($e in $edges) {
   $byId["$($e.i)"] = $e
   $pos["$($e.s)"] = @($e.x0, $e.z0); $pos["$($e.e)"] = @($e.x1, $e.z1)
+  # undirected degree (a junction is 3+ roads, whatever their direction)
+  $deg["$($e.s)"]++; $deg["$($e.e)"]++
   if (-not $adj["$($e.s)"]) { $adj["$($e.s)"] = @() }; $adj["$($e.s)"] += , @("$($e.e)", $e.len, "$($e.i)")
   if ($e.p -notmatch 'Oneway') { if (-not $adj["$($e.e)"]) { $adj["$($e.e)"] = @() }; $adj["$($e.e)"] += , @("$($e.s)", $e.len, "$($e.i)") }
 }
-function NearestNode($x, $z) { $best = $null; $bd = [double]::MaxValue; foreach ($k in $pos.Keys) { if (@($adj[$k]).Count -lt 3) { continue }; $d = [math]::Pow($pos[$k][0] - $x, 2) + [math]::Pow($pos[$k][1] - $z, 2); if ($d -lt $bd) { $bd = $d; $best = $k } }; $best }
+function NearestNode($x, $z, $exclude = @()) { $best = $null; $bd = [double]::MaxValue; foreach ($k in $pos.Keys) { if ([int]$deg[$k] -lt 3 -or ($exclude -contains $k)) { continue }; $d =[math]::Pow($pos[$k][0] - $x, 2) + [math]::Pow($pos[$k][1] - $z, 2); if ($d -lt $bd) { $bd = $d; $best = $k } }; $best }
 function ShortestPath($from, $to, $ban) {
   $dist = @{ $from = 0.0 }; $prev = @{}; $done = @{}
   while ($true) {
@@ -36,8 +48,9 @@ function ShortestPath($from, $to, $ban) {
   $nodes += $from; [array]::Reverse($nodes); [array]::Reverse($eids)
   @{ nodes = $nodes; edges = $eids }
 }
-$cp = @($Corners.Split(';') | % { $xy = $_.Split(','); , @([double]$xy[0], [double]$xy[1]) })
-$cn = @($cp | % { NearestNode $_[0] $_[1] })
+# each corner gets its own junction: a corner never snaps onto a junction an earlier corner already uses
+$cn = @()
+foreach ($c in @($Corners.Split(';'))) { $t = $c.Trim(); if ($t -like 'id:*') { $node = $t.Substring(3) } else { $xy = $t.Split(','); $node = NearestNode ([double]$xy[0]) ([double]$xy[1]) $cn }; $cn += $node }
 "corner nodes: $($cn -join ', ')"
 $ln = New-Object System.Collections.ArrayList; $le = New-Object System.Collections.ArrayList
 for ($i = 0; $i -lt $cn.Count; $i++) {
@@ -67,7 +80,7 @@ function Pieces($nodes) {
 function StopsFor($nodes) {
   $pcs = Pieces $nodes; $L = ($pcs | Measure-Object len -Sum).Sum; $step = $L / $Stops; $outS = @()
   for ($j = 0; $j -lt $Stops; $j++) {
-    $t = ($j + 0.5) * $step; $run = 0.0
+    $idx = [math]::Floor(($j + 0.5) * $pcs.Count / $Stops); $t = 0.0; for ($q = 0; $q -lt $idx; $q++) { $t += $pcs[$q].len }; $t += $pcs[$idx].len / 2; $run = 0.0
     foreach ($pc in $pcs) {
       if ($t -le $run + $pc.len) {
         $f = ($t - $run) / $pc.len; $mx = $pc.ax + ($pc.bx - $pc.ax) * $f; $mz = $pc.az + ($pc.bz - $pc.az) * $f
@@ -88,6 +101,9 @@ $cwS = StopsFor $cwNodes; $ccwS = StopsFor $ccwNodes
 "loop_$Name.json written: CW length $($cwS.length) m, CCW length $($ccwS.length) m"
 "CW shelters: " + (($cwS.stops | % { "($($_.shelter[0]),$($_.shelter[1]))" }) -join ' ')
 "CCW shelters: " + (($ccwS.stops | % { "($($_.shelter[0]),$($_.shelter[1]))" }) -join ' ')
+
+
+
 
 
 
