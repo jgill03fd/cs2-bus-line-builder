@@ -18,7 +18,7 @@ This is experimental. It was built for one city and is not a general tool.
 
 ## Requirements
 
-- Cities: Skylines II, running in a 1280x768 client window. Click positions assume this size.
+- Cities: Skylines II. Screen positions come from `profiles/<resolution>.json`; the default is `profiles/1280x768.json`. Set `CS2_UI_PROFILE` to use another. See CONTRIBUTING.md.
 - PowerShell 7.
 - The CitiesIIAgentBridge mod, installed separately. Get it from its own project page. This repository does not
   include it. Set `CS2_BRIDGE_DIR` to the folder that contains `bridge.ps1`.
@@ -75,6 +75,7 @@ These came from real mistakes during the build. The scripts assume them.
 - **Lines that leave the city** are named CITY TRANS N. Connectors into the city are RES(...), IND(...) or COM(...) CONN.
 - **Clear the screen with the mouse Back button** (`gamewin.ps1 back -X2 4`). One press closes one panel layer, and one press drops the Bus Line Tool together with its palette. Repeated presses never open the pause menu. Escape does not drop the Bus Line Tool, so do not rely on it.
 - **No clicks near the toolbar or panels while a build tool is active.** A click on the map with the Bus Line Tool selected can remove a stop from a route. Close panels and the overview first, then select the tool. A stray click removed a stop from a line once; the fix was to delete the line after a checkpoint and rebuild it from the placed points.
+
 
 
 
