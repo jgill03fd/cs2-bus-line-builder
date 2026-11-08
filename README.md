@@ -48,7 +48,7 @@ This is experimental. It was built for one city and is not a general tool.
   That worked for every stop in testing. `-Crops` saves a tooltip image per click, so you can check it
   afterwards. The first click after selecting the tool was lost once during testing, so check the first stop.
 - **Fleet minimums differ by line.** A line's minimum can be 1, 2 or 3, and the script does not set fleets.
-- **`roadkit.ps1` Refresh** calls `update-roads.ps1`, which is not included.
+- **`roadkit.ps1` Refresh** calls `update-roads.ps1`. It needs `CS2_BRIDGE_DIR` set and the game running with the bridge answering. Its output goes to `roads-cache\`, which is not committed.
 
 ## Not included
 
@@ -75,6 +75,7 @@ These came from real mistakes during the build. The scripts assume them.
 - **Lines that leave the city** are named CITY TRANS N. Connectors into the city are RES(...), IND(...) or COM(...) CONN.
 - **Clear the screen with the mouse Back button** (`gamewin.ps1 back -X2 4`). One press closes one panel layer, and one press drops the Bus Line Tool together with its palette. Repeated presses never open the pause menu. Escape does not drop the Bus Line Tool, so do not rely on it.
 - **No clicks near the toolbar or panels while a build tool is active.** A click on the map with the Bus Line Tool selected can remove a stop from a route. Close panels and the overview first, then select the tool. A stray click removed a stop from a line once; the fix was to delete the line after a checkpoint and rebuild it from the placed points.
+
 
 
 
