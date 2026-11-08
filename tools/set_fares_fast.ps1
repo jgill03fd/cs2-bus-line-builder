@@ -2,15 +2,13 @@
 # Speed: the per-click helper approach (new pwsh per click/screenshot) took ~56 s per line; this takes ~8 s per line.
 # Safety: the line panel layout changes between lines, so a fixed click spot can land on the "Assigned vehicles" slider and cut a
 # fleet. This script finds the TICKET PRICE slider as a continuous bar across the panel (text rows never pass), requires a second bar 60-90 px below it, skips the
-# line if it cannot confirm it, works out where the track starts, and checks that the knob is at the left end after the click.
+# line if it cannot confirm it, works out where the track starts, and checks the knob is at the left end after the click.
 # Coordinates: half-scale reference space (client x 0.5) for a 3840x2160 client at screen (0,0); every point is doubled for input
 # (see profiles/3840x2160.json on the calibration branch). Other resolutions need their own values.
 # Usage: set_fares_fast.ps1 -Jobs "notches,rowY;..." -TabY 631 -Out fares.png [-NoSet] [-KeepOpen]
 #   rowY = list row of the line's magnifier icon (394,rowY); notches = wheel notches down from the top (0 for the first 6 rows).
 #   Tabs (x=300): bus 631, train 679, tram 727, subway 775. Overview icon at (1640,1005). Overview close X (1655,510).
 # Output: a montage of line name + ticket price per job, and a log of skipped or unverified lines.
-param([string]$Jobs,[int]$TabY=631,[int]$PriceX=194,[int]$PriceY=314,[string]$Out,[switch]$NoSet,[switch]$KeepOpen)
-# Fast, single-process fare setter. Coordinates are half-scale (x2 = physical px on the 3840x2160 client at 0,0).
 param([string]$Jobs,[int]$TabY=631,[int]$PriceX=194,[int]$PriceY=314,[string]$Out,[switch]$NoSet,[switch]$KeepOpen)
 # Fast, single-process fare setter. Coordinates are half-scale (x2 = physical px on the 3840x2160 client at 0,0).
 Add-Type -AssemblyName System.Drawing
